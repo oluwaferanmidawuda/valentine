@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine for Esther ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+  text-align: center;
+  background: linear-gradient(135deg, #8b0000, #ff4d6d, #ff99c8, #000000);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  overflow: hidden;
+  position: relative;
+}
+
+@keyframes gradientShift {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+
+.container {
+  margin-top: 20vh;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
+#message {
+  font-size: 1.4em;
+  line-height: 1.6;
+  min-height: 120px;
+}
+
+button {
+  padding: 15px 35px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  margin: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#yes {
+  background: white;
+  color: #ff4d6d;
+  box-shadow: 0 0 20px white;
+}
+
+#yes:hover {
+  transform: scale(1.1);
+}
+
+#no {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  position: relative;
+}
+
+.heart {
+  position: absolute;
+  animation: float 6s linear infinite;
+  font-size: 20px;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+.flower {
+  position: fixed;
+  width: 60px;
+  opacity: 0.2;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background flowers -->
+<img src="https://i.imgur.com/JmXrLHw.png" class="flower" style="top:10%; left:5%; transform: rotate(20deg);">
+<img src="https://i.imgur.com/JmXrLHw.png" class="flower" style="top:70%; left:80%; transform: rotate(-30deg);">
+<img src="https://i.imgur.com/JmXrLHw.png" class="flower" style="top:40%; left:40%; transform: rotate(10deg);">
+
+<audio id="piano" autoplay loop>
+  <source src="piano.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="vibe" loop>
+  <source src="vibe.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <h1 id="question">Will you be my Valentine? 💌</h1>
+
+  <div id="buttons">
+    <button id="yes" onclick="yesClicked()">Yes 💖</button>
+    <button id="no" onclick="moveNo()">No 🙈</button>
+  </div>
+
+  <div id="message"></div>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+
+// Yes button action
+function yesClicked() {
+  document.getElementById("piano").pause();
+  document.getElementById("vibe").play();
+
+  document.getElementById("buttons").style.display = "none";
+  document.getElementById("question").innerText = "She said yes !!! 😝❤️💖💫💌✨";
+
+  document.getElementById("message").innerHTML = `
+  Owotogbe Oreoluwa Esther… you made me the happiest 😝❤️<br>
+  Happy Valentine’s Day 💖💫<br>
+  I love you so much 💌✨<br><br>
+  — F~ ❤️
+  `;
+
+  startFireworks();
+}
+
+// No button dodging
+function moveNo() {
+  let btn = document.getElementById("no");
+  btn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+  btn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+}
+
+// Floating hearts
+function createHeart() {
+  let heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}
+setInterval(createHeart, 400);
+
+// Fireworks
+let canvas = document.getElementById("fireworks");
+let ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function startFireworks() {
+  setInterval(() => {
+    for(let i=0;i<50;i++){
+      particles.push({
+        x: canvas.width/2,
+        y: canvas.height/2,
+        vx: (Math.random()-0.5)*10,
+        vy: (Math.random()-0.5)*10,
+        life: 100
+      });
+    }
+  },500);
+}
+
+function animateFireworks(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,index)=>{
+    ctx.fillStyle="white";
+    ctx.fillRect(p.x,p.y,3,3);
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.life--;
+    if(p.life<=0) particles.splice(index,1);
+  });
+  requestAnimationFrame(animateFireworks);
+}
+animateFireworks();
+
+</script>
+
+</body>
+</html>
